@@ -102,7 +102,7 @@ for(i in 1:250){
     q2 <- sample(inputs$q2, 1)
     p <- sample(inputs$p, 1)
     s <- sample(inputs$s, 1)
-    values <- round((2700- q1 - q2)*p - (s * p))
+    values <- round((2700- q1 - q2)*p - (s * p), digits = 2)
     # store the results with inputs 
     outputs <- rbind(outputs, data.frame(q1, q2, p, s, values))
 
@@ -111,10 +111,16 @@ for(i in 1:250){
   storage[ , i] <- outputs$value
 }
 
+# 10) Convert the storage matrix into a data frame named storage.
 storage <- data.frame(storage)
+
+# 11) Create a data frame named cltData that stores all the means of each 
+# column of the storage data frame.
 
 cltData <- data.frame( mean = colMeans(storage))
 
+
+# 12) Plot the histograms of the data within cltData
 par(mfrow=c(1, 1)) 
 
 hist(cltData$mean)
