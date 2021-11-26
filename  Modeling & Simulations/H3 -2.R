@@ -1,6 +1,6 @@
 
 #=============================================================================
-# PROGRAMMER: Luis Socarras
+# PROGRAMMER: Luis David Socarras
 # PANTHER ID: 6243743
 # CLASS: CAP4830 
 # SECTION: U01
