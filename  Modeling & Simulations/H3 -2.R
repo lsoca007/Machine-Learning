@@ -1,15 +1,14 @@
 
 #=============================================================================
-# PROGRAMMER: Your name
-# PANTHER ID: Your panther ID #
-# CLASS: COP2210
-# SECTION: Your class section: example U01
-# SEMESTER: The current semester: example Spring 2021
-# CLASSTIME: Your CAP4830 course meeting time :example T/TH 9:00-10:15 am
+# PROGRAMMER: Luis Socarras
+# PANTHER ID: 6243743
+# CLASS: CAP4830 
+# SECTION: U01
+# SEMESTER: Fall 2021
+# CLASSTIME: T/TH 12:30-01:45 pm
 # CERTIFICATION: I understand FIU’s academic policies, and I certify that this
 # work is my own and that none of it is the work of any other person.
 #=============================================================================
-
 
 #install.packages('triangle')
 library(triangle)
@@ -54,16 +53,12 @@ for(i in 1:1000){
   values <- round((2700- q1 - q2)*p - (s * p))
   # store the results with inputs 
   outputs <- rbind(outputs, data.frame(q1, q2, p, s, values))
-  
-  
 }
 
 # 5) Plot the histogram of outputs$value
 par(mfrow=c(1, 1)) 
 
 hist(outputs$value)
-
-
 
 # 6) Create the empirical CDF of outputs$value and plot this CDF
 empiricalCDF <- ecdf(outputs$value)
@@ -74,9 +69,7 @@ plot(empiricalCDF)
 
 # 7) Calculate the P0, P10, P20, P30, ... P90, P100 and output these values on the R-Console
 
-
 quantile(outputs$value, probs = c(seq(0,1,by = 0.10)))
-
 
 # 8) Find the P20 to P80 interval values from the empirical CDF.
 
@@ -90,12 +83,11 @@ sprintf("Interval of Interest: [ %.2f , %.2f ]",  px$value[3], px$value[9])
 # the Monte Carlo simulation of the model in #3. Each Monte Carlo 
 # simulation will have 250 realizations.
 
-
 storage <- matrix(ncol = 250, nrow = 100)
 
 for(i in 1:250){
   outputs <- data.frame(q1= double(), q2= double(), p= double(), s= double(), values = double())
-  for(i in 1:100){
+  for(j in 1:100){
     
     # draw a random sample for the cost input
     q1 <- sample(inputs$q1, 1)
@@ -121,9 +113,33 @@ cltData <- data.frame( mean = colMeans(storage))
 
 
 # 12) Plot the histograms of the data within cltData
-par(mfrow=c(1, 1)) 
 
+par(mfrow=c(1, 1)) 
 hist(cltData$mean)
 
 
+# 13) Check if the data within cltData is normally distributed. Hint use a normal test for this.
 
+# shapiro.test()
+
+shapiro.test(cltData$mean)
+
+# 14) State in your code using a comment if the data in cltData is normal distributed or not and why.
+###################################################################################################
+#  p-value = 0.1663 - Since the p-value > 0.05, we can assume that the data is normally distributed
+###################################################################################################
+
+
+# 15) Calculate the 80% confidence internal and output the lower and upper 
+# bounds of this interval on the R-console
+
+n <- nrow(cltData)
+cltMean <- mean(cltData$mean)
+cltSD <- sd(cltData$mean)
+
+margin <- qt(0.80, df = n-1 )* cltSD/sqrt(n)
+
+lowerBound <- cltMean - margin
+higherBound <- cltMean + margin
+
+sprintf("Interval of Interest: [ %.2f , %.2f ]",  lowerBound, higherBound)
